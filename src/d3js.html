@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I Hug Trees D3 Visualization</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .bar { fill: #336699; }
+    .axis text { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Interactive Tree Data Visualization 🌳</h1>
+  <p>Check out the main site where we have used other d3.js dataset visualizations: <a href="https://ihugtrees.org/data-analytics/co2-emissions-by-country.html" target="_blank">I Hug Trees</a></p>
+  <svg width="600" height="300"></svg>
+
+  <script>
+    const data = [25, 40, 30, 55, 20, 60, 45];
+    const svg = d3.select("svg");
+    const width = +svg.attr("width");
+    const height = +svg.attr("height");
+    const x = d3.scaleBand().domain(data.map((d,i) => i)).range([0,width]).padding(0.2);
+    const y = d3.scaleLinear().domain([0, d3.max(data)]).range([height,0]);
+    
+    svg.selectAll(".bar")
+       .data(data)
+       .enter().append("rect")
+       .attr("class", "bar")
+       .attr("x", (d,i) => x(i))
+       .attr("y", d => y(d))
+       .attr("width", x.bandwidth())
+       .attr("height", d => height - y(d));
+    
+    svg.append("g")
+       .attr("transform", `translate(0,${height})`)
+       .call(d3.axisBottom(x));
+    
+    svg.append("g")
+       .call(d3.axisLeft(y));
+  </script>
+</body>
+</html>
